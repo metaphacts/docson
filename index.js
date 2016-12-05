@@ -23,7 +23,6 @@ var highlight=require("./lib/highlight");
 var jsonpointer=require("jsonpointer.js");
 var marked=require("marked");
 var traverse=require("traverse");
-var fs=require("fs");
 
 var ready = $.Deferred();
 var boxTemplate;
@@ -31,10 +30,6 @@ var signatureTemplate;
 var source;
 var stack = [];
 var boxes=[];
-
-var style=document.createElement("style");
-style.textContent=fs.readFileSync(__dirname+"/css/docson.css","utf8");
-document.head.appendChild(style);
 
 Handlebars.registerHelper('scope', function(schema, options) {
     var result;
@@ -318,16 +313,16 @@ Handlebars.registerHelper('l', function(context) {
     console.log(context);
 });
 
-function init() {
-    boxTemplate=Handlebars.compile(fs.readFileSync(__dirname+"/templates/box.html","utf8"));
-    signatureTemplate=Handlebars.compile(fs.readFileSync(__dirname+"/templates/signature.html","utf8"));
+function init(templates) {
+    boxTemplate=Handlebars.compile(templates.box);
+    signatureTemplate=Handlebars.compile(templates.signature);
     ready.resolve();
 }
 
-docson.doc = function(element, schema, ref, baseUrl) {
+docson.doc = function(element, schema, templates, ref, baseUrl) {
     var d = $.Deferred();
     if(baseUrl === undefined) baseUrl='';
-    init();
+    init(templates);
     ready.done(function() {
         if(typeof element == "string") {
             element = $("#"+element);
