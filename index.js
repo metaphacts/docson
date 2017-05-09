@@ -132,7 +132,7 @@ Handlebars.registerHelper('main', function(schema, options) {
 });
 
 var simpleSchema = function(schema) {
-    var result = schema.description===undefined && schema.title===undefined && schema.id===undefined;
+    var result = schema.description===undefined && schema.title===undefined && schema.id===undefined && schema.anyOf === undefined;
     result &= schema.properties===undefined;
     return result;
 };
